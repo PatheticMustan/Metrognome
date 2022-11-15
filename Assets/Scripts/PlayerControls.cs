@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControls : MonoBehaviour
-{
+public class PlayerControls : MonoBehaviour {
     private CharacterController controller;
 
     public GameObject obj;
@@ -15,27 +14,23 @@ public class PlayerControls : MonoBehaviour
 
     private bool queuedJump;
     private bool groundedPlayer;
-    
 
-    private void Start()
-    {
+
+    private void Start() {
         controller = GetComponent<CharacterController>();
         queuedJump = false;
     }
 
-    void Update()
-    {
+    void Update() {
         groundedPlayer = controller.isGrounded;
-        if (groundedPlayer && playerVelocity.y < 0)
-        {
+        if (groundedPlayer && playerVelocity.y < 0) {
             playerVelocity.y = 0f;
         }
 
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         //GetComponent<Rigidbody>().MovePosition(move * Time.deltaTime * playerSpeed);
 
-        if (move != Vector3.zero)
-        {
+        if (move != Vector3.zero) {
             gameObject.transform.position += move;
         }
         playerVelocity.x = Input.GetAxis("Horizontal") * playerSpeed;
@@ -44,8 +39,7 @@ public class PlayerControls : MonoBehaviour
         // add bunnyhopping
         if (Input.GetButtonDown("Jump")) queuedJump = true;
         if (Input.GetButtonUp("Jump")) queuedJump = false;
-        if (groundedPlayer && queuedJump)
-        {
+        if (groundedPlayer && queuedJump) {
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -1 * gravityValue);
             queuedJump = false;
         }
