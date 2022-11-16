@@ -1,14 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// A simple FPP (First Person Perspective) camera rotation script.
-/// Like those found in most FPS (First Person Shooter) games.
-/// </summary>
-public class CameraMovement : MonoBehaviour
-{
+public class CameraMovement : MonoBehaviour {
 
-	public float Sensitivity
-	{
+	public float Sensitivity {
 		get { return sensitivity; }
 		set { sensitivity = value; }
 	}
@@ -16,15 +10,21 @@ public class CameraMovement : MonoBehaviour
 	[Range(0f, 90f)] [SerializeField] float yRotationLimit = 88f;
 
 	Vector2 rotation = Vector2.zero;
+	float mouseX, mouseY;
 
-	void Update()
-	{
-		rotation.x += Input.GetAxis("Mouse X") * sensitivity;
-		rotation.y += Input.GetAxis("Mouse Y") * sensitivity;
-		rotation.y = Mathf.Clamp(rotation.y, -yRotationLimit, yRotationLimit);
-		var xQuat = Quaternion.AngleAxis(rotation.x, Vector3.up);
-		var yQuat = Quaternion.AngleAxis(rotation.y, Vector3.left);
+    private void Start() {
+		mouseX = 0;
+		mouseY = 0;
+    }
 
-		transform.localRotation = xQuat * yQuat; //Quaternions seem to rotate more consistently than EulerAngles. Sensitivity seemed to change slightly at certain degrees using Euler. transform.localEulerAngles = new Vector3(-rotation.y, rotation.x, 0);
+    void Update() {
+		mouseX += Input.GetAxis("Mouse X") * sensitivity;
+		mouseY += Input.GetAxis("Mouse Y") * sensitivity;
+		mouseY = Mathf.Clamp(rotation.y, -yRotationLimit, yRotationLimit);
+
+		Quaternion xQuat = Quaternion.AngleAxis(mouseX, Vector3.up);
+		Quaternion yQuat = Quaternion.AngleAxis(mouseY, Vector3.left);
+
+		transform.localRotation = xQuat * yQuat;
 	}
 }
