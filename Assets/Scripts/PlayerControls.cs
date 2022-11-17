@@ -27,9 +27,11 @@ public class PlayerControls : MonoBehaviour {
             playerVelocity.y = Mathf.Max(0f, playerVelocity.y);
         }
 
-        Debug.Log(cam.transform.eulerAngles.y);
+        float r = cam.transform.eulerAngles.y;
         playerVelocity.x = Input.GetAxis("Horizontal") * playerSpeed;
         playerVelocity.z = Input.GetAxis("Vertical") * playerSpeed;
+        // playerVelocity.x = (Mathf.Cos(r) * Input.GetAxis("Horizontal") + Mathf.Sin(r) * Input.GetAxis("Vertical")) * playerSpeed;
+        // playerVelocity.z = (Mathf.Cos(r) * Input.GetAxis("Vertical") + Mathf.Sin(r) * Input.GetAxis("Horizontal")) * playerSpeed;
 
         // add bunnyhopping
         if (Input.GetButtonDown("Jump")) queuedJump = true;
