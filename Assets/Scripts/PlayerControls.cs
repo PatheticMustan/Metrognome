@@ -14,6 +14,8 @@ public class PlayerControls : MonoBehaviour {
     private bool queuedJump;
     private Camera cam;
 
+    private float xSpeed, zSpeed;
+
 
     private void Start() {
         controller = GetComponent<CharacterController>();
@@ -27,9 +29,18 @@ public class PlayerControls : MonoBehaviour {
             playerVelocity.y = Mathf.Max(0f, playerVelocity.y);
         }
 
-        float r = cam.transform.eulerAngles.y;
-        playerVelocity.x = Input.GetAxis("Horizontal") * playerSpeed;
-        playerVelocity.z = Input.GetAxis("Vertical") * playerSpeed;
+        Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        Vector3 forward = cam.transform.TransformDirection(Vector3.forward);
+        Vector3 right = cam.transform.TransformDirection(Vector3.right);
+        xSpeed = input.x * playerSpeed;
+        zSpeed = input.y * playerSpeed * ((Input.GetKey(KeyCode.LeftShift) && input.y>0)? 2 : 1);
+        Vector3 res = right * xSpeed + forward * zSpeed;
+
+        playerVelocity.x = res.x;
+        playerVelocity.z = res.z;
+
+        
         // playerVelocity.x = (Mathf.Cos(r) * Input.GetAxis("Horizontal") + Mathf.Sin(r) * Input.GetAxis("Vertical")) * playerSpeed;
         // playerVelocity.z = (Mathf.Cos(r) * Input.GetAxis("Vertical") + Mathf.Sin(r) * Input.GetAxis("Horizontal")) * playerSpeed;
 
