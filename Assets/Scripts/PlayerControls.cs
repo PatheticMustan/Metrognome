@@ -11,7 +11,7 @@ public class PlayerControls : MonoBehaviour {
 
     private float gravityValue = -9.81f;
 
-    private bool queuedJump;
+    public bool queuedJump;
     private Camera cam;
 
     private float xSpeed, zSpeed;
@@ -30,15 +30,18 @@ public class PlayerControls : MonoBehaviour {
         }
 
         Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        float xs = ((Input.GetKey("left ctrl") && input.y > 0) ? 2 : 1);
 
         Vector3 forward = cam.transform.TransformDirection(Vector3.forward);
         Vector3 right = cam.transform.TransformDirection(Vector3.right);
         xSpeed = input.x * playerSpeed;
-        zSpeed = input.y * playerSpeed * ((Input.GetKey(KeyCode.LeftShift) && input.y>0)? 2 : 1);
+        zSpeed = input.y * playerSpeed * xs;
         Vector3 res = right * xSpeed + forward * zSpeed;
 
         playerVelocity.x = res.x;
         playerVelocity.z = res.z;
+
+        //Debug.Log(controller.isGrounded);
 
         
         // playerVelocity.x = (Mathf.Cos(r) * Input.GetAxis("Horizontal") + Mathf.Sin(r) * Input.GetAxis("Vertical")) * playerSpeed;
@@ -48,6 +51,7 @@ public class PlayerControls : MonoBehaviour {
         if (Input.GetButtonDown("Jump")) queuedJump = true;
         if (Input.GetButtonUp("Jump")) queuedJump = false;
         if (controller.isGrounded && queuedJump) {
+            Debug.Log("Natsumi");
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -1 * gravityValue);
             queuedJump = false;
         }
