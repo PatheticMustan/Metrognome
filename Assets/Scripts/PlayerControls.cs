@@ -51,7 +51,6 @@ public class PlayerControls : MonoBehaviour {
         if (Input.GetButtonDown("Jump")) queuedJump = true;
         if (Input.GetButtonUp("Jump")) queuedJump = false;
         if (controller.isGrounded && queuedJump) {
-            Debug.Log("Natsumi");
             playerVelocity.y += Mathf.Sqrt(jumpHeight * -1 * gravityValue);
             queuedJump = false;
         }
@@ -59,6 +58,14 @@ public class PlayerControls : MonoBehaviour {
         // handle gravity
         playerVelocity.y += gravityValue * Time.deltaTime;
 
+        if (Input.GetKeyDown(KeyCode.R)) {
+            GetComponent<CharacterController>().enabled = false;
+            transform.position = new Vector3(0, 1, 0);
+            GetComponent<CharacterController>().enabled = true;
+            playerVelocity = new Vector3(0, 0, 0);
+            
+            
+        }
 
         // use the resulting vector as the player's velocity
         Vector3 facingTowards = cam.transform.forward * playerVelocity.magnitude;
