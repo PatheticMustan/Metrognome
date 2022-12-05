@@ -32,14 +32,11 @@ public class PlayerControls : MonoBehaviour {
         Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         float xs = ((Input.GetKey("left ctrl") && input.y > 0) ? 2 : 1);
 
-        Vector3 forward = cam.transform.TransformDirection(Vector3.forward);
-        Vector3 right = cam.transform.TransformDirection(Vector3.right);
-        xSpeed = input.x * playerSpeed;
-        zSpeed = input.y * playerSpeed * xs;
-        Vector3 res = right * xSpeed + forward * zSpeed;
+        Vector3 schmove = Quaternion.Euler(0f, Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg + cam.transform.eulerAngles.y, 0f) * new Vector3(input.y, 0, input.x);
+        Debug.Log(schmove);
+        schmove.y = playerVelocity.y;
 
-        playerVelocity.x = res.x;
-        playerVelocity.z = res.z;
+        playerVelocity = schmove;
 
         //Debug.Log(controller.isGrounded);
 
@@ -63,13 +60,9 @@ public class PlayerControls : MonoBehaviour {
             transform.position = new Vector3(0, 1, 0);
             GetComponent<CharacterController>().enabled = true;
             playerVelocity = new Vector3(0, 0, 0);
-            
-            
         }
 
         // use the resulting vector as the player's velocity
-        Vector3 facingTowards = cam.transform.forward * playerVelocity.magnitude;
-        facingTowards.y = 0;
         controller.Move(playerVelocity * Time.deltaTime);
     }
 }
